@@ -1,0 +1,63 @@
+import type {
+  ChallengeBody,
+  ChallengeRequest,
+  PlatformResponse,
+  VerifyBody,
+  VerifyRequest,
+} from "./types.js";
+import type { X402Config } from "./config.js";
+import { signedHeaders } from "./sign.js";
+
+type FetchFn = typeof fetch;
+
+/** Per-request timeout. A stalled platform connection must fail closed,
+ *  not hang the caller's payment gate. AbortSignal.timeout is built-in
+ *  (Node >=17.3; engines floor is >=18) — still zero runtime deps. */
+const REQUEST_TIMEOUT_MS = 10_000;
+
+// The platform signs over getPathInfo() which equals exactly these paths (Laravel 'api' prefix included). The platform MUST be served at domain root; sub-path reverse-proxying changes getPathInfo() and breaks signatures.
+const CHALLENGE_PATH = "/api/v1/challenge";
+const VERIFY_PATH = "/api/v1/verify";
+
+export class PlatformClient {
+  constructor(
+    private cfg: X402Config,
+    private fetchFn: FetchFn = fetch,
+  ) {}
+
+  challenge(req: ChallengeRequest): Promise<PlatformResponse<ChallengeBody>> {
+    return this.post<ChallengeBody>(CHALLENGE_PATH, req);
+  }
+
+  verify(req: VerifyRequest): Promise<PlatformResponse<VerifyBody>> {
+    return this.post<VerifyBody>(VERIFY_PATH, req);
+  }
+
+  private async post<T>(
+    path: string,
+    payload: unknown,
+  ): Promise<PlatformResponse<T>> {
+    const body = JSON.stringify(payload);
+    const headers = {
+      "content-type": "application/json",
+      ...signedHeaders(this.cfg.keyId, this.cfg.secret, "POST", path, body),
+    };
+    try {
+      const resp = await this.fetchFn(this.cfg.baseUrl + path, {
+        method: "POST",
+        headers,
+        body,
+        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+      });
+      let parsed: unknown = {};
+      try {
+        parsed = await resp.json();
+      } catch {
+        parsed = {};
+      }
+      return { status: resp.status, body: parsed as T };
+    } catch {
+      return { status: 0, body: {} as unknown as T };
+    }
+  }
+}

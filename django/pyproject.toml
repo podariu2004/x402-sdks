@@ -1,0 +1,26 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "x402-django"
+version = "0.1.0"
+description = "Thin Django middleware for the x402 paywall platform (X402v1 wire contract)."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "django>=4.2"]
+
+[project.urls]
+Homepage = "https://payrelayer.com"
+Repository = "https://github.com/podariu2004/paywall"
+Documentation = "https://payrelayer.com/sdks/django"
+
+[tool.hatch.build.targets.wheel]
+packages = ["x402_django"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

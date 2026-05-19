@@ -1,0 +1,23 @@
+{
+  "name": "@x402/next",
+  "version": "0.1.0",
+  "description": "x402 payment gate for Next.js (App Router) — pay-per-request for AI agents. Edge-runtime safe.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" }
+  },
+  "files": ["dist", "README.md"],
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.build.json",
+    "test": "tsc -p tsconfig.json && node --test 'dist/**/*.test.js'",
+    "prepublishOnly": "npm test"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "typescript": "^5.6.0"
+  },
+  "license": "MIT"
+}
