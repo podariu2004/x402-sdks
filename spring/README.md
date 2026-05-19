@@ -61,7 +61,7 @@ Server-side env vars:
 
 ## Source
 
-<https://github.com/podariu2004/paywall/tree/main/sdks/spring>
+<https://github.com/podariu2004/x402-sdks/tree/main/spring>
 
 ## Docs
 

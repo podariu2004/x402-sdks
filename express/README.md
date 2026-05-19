@@ -46,7 +46,7 @@ Both `X402_API_KEY` and `X402_SECRET` are server-side secrets. Never expose them
 
 ## Source
 
-<https://github.com/podariu2004/paywall/tree/main/sdks/express>
+<https://github.com/podariu2004/x402-sdks/tree/main/express>
 
 ## Docs
 

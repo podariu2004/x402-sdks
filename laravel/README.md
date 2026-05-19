@@ -39,7 +39,7 @@ Server-side env vars:
 
 ## Source
 
-<https://github.com/podariu2004/paywall/tree/main/sdks/laravel>
+<https://github.com/podariu2004/x402-sdks/tree/main/laravel>
 
 ## Docs
 

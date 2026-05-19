@@ -55,7 +55,7 @@ Server-side env vars:
 
 ## Source
 
-<https://github.com/podariu2004/paywall/tree/main/sdks/go>
+<https://github.com/podariu2004/x402-sdks/tree/main/go>
 
 ## Docs
 
